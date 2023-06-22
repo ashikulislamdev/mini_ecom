@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:mini_ecom/controllers/main_screen_provider.dart';
+import 'package:provider/provider.dart';
+
+import 'views/ui/main_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (context) => MainScreenNotifier())
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -16,23 +22,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MainScreen(),
-    );
-  }
-}
-
-class MainScreen extends StatelessWidget {
-  const MainScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text(
-          "Main Screen",
-          style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
-        ),
-      ),
+      home: MainScreen(),
     );
   }
 }
