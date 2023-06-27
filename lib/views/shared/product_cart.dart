@@ -67,7 +67,7 @@ class _ProductCartState extends State<ProductCart> {
                     Text(
                       widget.name,
                       style: appStyleWithHt(
-                          36, Colors.black, FontWeight.bold, 1.1),
+                          32, Colors.black, FontWeight.bold, 1.1),
                     ),
                     Text(
                       widget.category,
@@ -84,7 +84,7 @@ class _ProductCartState extends State<ProductCart> {
                   children: [
                     Text(
                       widget.price,
-                      style: appStyle(30, Colors.black, FontWeight.w600),
+                      style: appStyle(28, Colors.black, FontWeight.w600),
                     ),
                     Row(
                       children: [
