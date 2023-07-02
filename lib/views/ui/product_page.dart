@@ -4,6 +4,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:mini_ecom/models/sneaker_model.dart';
 import 'package:mini_ecom/services/helper.dart';
 import 'package:mini_ecom/views/shared/app_style.dart';
+import 'package:mini_ecom/views/shared/checkout_btn.dart';
 import 'package:provider/provider.dart';
 import 'package:mini_ecom/controllers/producut_provider.dart';
 
@@ -65,6 +66,7 @@ class _ProductPageState extends State<ProductPage> {
                               GestureDetector(
                                 onTap: () {
                                   Navigator.pop(context);
+                                  productNotifier.shoeSize.clear();
                                 },
                                 child: const Icon(
                                   Icons.close,
@@ -276,7 +278,90 @@ class _ProductPageState extends State<ProductPage> {
                                                   ),
                                                 ],
                                               ),
+                                              const SizedBox(height: 10),
+                                              SizedBox(
+                                                height: 40,
+                                                child: ListView.builder(
+                                                  itemCount: productNotifier
+                                                      .shoeSize.length,
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  padding: EdgeInsets.zero,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    final sizes =
+                                                        productNotifier
+                                                            .shoeSize[index];
+                                                    return Padding(
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 8),
+                                                      child: ChoiceChip(
+                                                        shape: RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        60),
+                                                            side: const BorderSide(
+                                                                color: Colors
+                                                                    .black,
+                                                                width: 1,
+                                                                style:
+                                                                    BorderStyle
+                                                                        .solid)),
+                                                        disabledColor:
+                                                            Colors.white,
+                                                        label: Text(
+                                                          sizes['size'],
+                                                          style: appStyle(
+                                                              18,
+                                                              Colors.black,
+                                                              FontWeight.w500),
+                                                        ),
+                                                        labelStyle: appStyle(
+                                                            18,
+                                                            sizes['isSelected']
+                                                                ? Colors.white
+                                                                : Colors.black,
+                                                            FontWeight.w500),
+                                                        selected:
+                                                            sizes['isSelected'],
+                                                        onSelected: (newState) {
+                                                          productNotifier
+                                                              .toggleCheck(
+                                                                  index);
+                                                        },
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              )
                                             ],
+                                          ),
+                                          const SizedBox(height: 10),
+                                          const Divider(
+                                              indent: 10,
+                                              endIndent: 10,
+                                              color: Colors.black),
+                                          const SizedBox(height: 10),
+                                          Text(
+                                            sneaker.description,
+                                            textAlign: TextAlign.justify,
+                                            maxLines: 4,
+                                            style: appStyle(14, Colors.black,
+                                                FontWeight.normal),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Align(
+                                            alignment: Alignment.bottomCenter,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 12),
+                                              child: CheckOutBtn(
+                                                onTap: () {},
+                                                btnLabel: 'Add to bag',
+                                              ),
+                                            ),
                                           )
                                         ],
                                       ),

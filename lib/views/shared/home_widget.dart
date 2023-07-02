@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:mini_ecom/controllers/producut_provider.dart';
 import 'package:mini_ecom/models/sneaker_model.dart';
 import 'package:mini_ecom/views/shared/app_style.dart';
 import 'package:mini_ecom/views/shared/new_shoes.dart';
 import 'package:mini_ecom/views/shared/product_cart.dart';
 import 'package:mini_ecom/views/ui/product_by_cat.dart';
 import 'package:mini_ecom/views/ui/product_page.dart';
+import 'package:provider/provider.dart';
 
 class HomeWidget extends StatelessWidget {
   const HomeWidget({
@@ -19,6 +21,7 @@ class HomeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
+    var productNotifier = Provider.of<ProductNotifier>(context);
 
     return Column(
       children: [
@@ -40,6 +43,9 @@ class HomeWidget extends StatelessWidget {
                     final shoe = snapshot.data![index];
                     return GestureDetector(
                       onTap: () {
+                        productNotifier.shoeSize = shoe.sizes;
+                        //print(productNotifier.shoeSize);
+
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => ProductPage(
                                 id: shoe.id, category: shoe.category)));
