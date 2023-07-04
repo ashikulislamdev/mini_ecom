@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:hive/hive.dart';
 import 'package:mini_ecom/models/sneaker_model.dart';
 import 'package:mini_ecom/services/helper.dart';
 import 'package:mini_ecom/views/shared/app_style.dart';
@@ -20,6 +21,7 @@ class ProductPage extends StatefulWidget {
 
 class _ProductPageState extends State<ProductPage> {
   final PageController pageController = PageController();
+  final _cartBox = Hive.box('cart_box');
 
   late Future<SneakersModel> _sneakers;
 
@@ -31,6 +33,10 @@ class _ProductPageState extends State<ProductPage> {
     } else {
       _sneakers = Helper().getKidsSneakersById(widget.id);
     }
+  }
+
+  Future<void> _createCart(Map<String, dynamic> newCart) async {
+    await _cartBox.add(newCart);
   }
 
   @override
@@ -327,6 +333,23 @@ class _ProductPageState extends State<ProductPage> {
                                                         selected:
                                                             sizes['isSelected'],
                                                         onSelected: (newState) {
+                                                          if (productNotifier
+                                                              .sizes
+                                                              .contains(sizes[
+                                                                  'size'])) {
+                                                            productNotifier
+                                                                .sizes
+                                                                .remove(sizes[
+                                                                    'size']);
+                                                          } else {
+                                                            productNotifier
+                                                                .sizes
+                                                                .add(sizes[
+                                                                    'size']);
+                                                          }
+                                                          print(productNotifier
+                                                              .sizes);
+
                                                           productNotifier
                                                               .toggleCheck(
                                                                   index);
@@ -358,8 +381,24 @@ class _ProductPageState extends State<ProductPage> {
                                               padding: const EdgeInsets.only(
                                                   top: 12),
                                               child: CheckOutBtn(
-                                                onTap: () {},
-                                                btnLabel: 'Add to bag',
+                                                onTap: () async {
+                                                  _createCart({
+                                                    'id': sneaker.id,
+                                                    'name': sneaker.name,
+                                                    'category':
+                                                        sneaker.category,
+                                                    'sizes':
+                                                        productNotifier.sizes,
+                                                    'price': sneaker.price,
+                                                    'imageUrl':
+                                                        sneaker.imageUrl[0],
+                                                    'qty': 1,
+                                                  });
+                                                  //productNotifier.sizes.clear();
+                                                  print(productNotifier.sizes);
+                                                  Navigator.pop(context);
+                                                },
+                                                btnLabel: 'Add to Cart',
                                               ),
                                             ),
                                           )
