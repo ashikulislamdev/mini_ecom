@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:mini_ecom/models/constants.dart';
 import 'package:mini_ecom/views/shared/app_style.dart';
+import 'package:mini_ecom/views/ui/favorite_page.dart';
 
 class ProductCart extends StatefulWidget {
   const ProductCart(
@@ -21,14 +24,33 @@ class ProductCart extends StatefulWidget {
 }
 
 class _ProductCartState extends State<ProductCart> {
+  final _favBox = Hive.box('fav_box');
+
+  Future<void> createFav(Map<String, dynamic> addFav) async {
+    await _favBox.add(addFav);
+    getFavorite();
+  }
+
+  getFavorite() {
+    final favData = _favBox.keys.map((key) {
+      final item = _favBox.get(key);
+
+      return {'key': key, 'id': item['id']};
+    }).toSet();
+
+    favor = favData.toList();
+    ids = favor.map((item) => item['id']).toList();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
     bool selected = true;
     return Padding(
-      padding: EdgeInsets.fromLTRB(8, 0, 20, 0),
+      padding: const EdgeInsets.fromLTRB(8, 0, 20, 0),
       child: ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(16)),
+        borderRadius: const BorderRadius.all(Radius.circular(16)),
         child: Container(
           width: dSize.width * 0.6,
           height: dSize.height,
@@ -45,12 +67,31 @@ class _ProductCartState extends State<ProductCart> {
               Stack(
                 children: [
                   Positioned(
-                      top: 10,
-                      right: 10,
-                      child: GestureDetector(
-                        onTap: null,
-                        child: const Icon(Icons.favorite_rounded),
-                      )),
+                    top: 10,
+                    right: 10,
+                    child: GestureDetector(
+                      onTap: () {
+                        print("clicked");
+                        if (ids.contains(widget.id)) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const FavoritePage()));
+                        } else {
+                          createFav({
+                            'id': widget.id,
+                            'name': widget.name,
+                            'category': widget.category,
+                            'price': widget.price,
+                            'imageUrl': widget.image
+                          });
+                        }
+                      },
+                      child: ids.contains(widget.id)
+                          ? const Icon(Icons.favorite)
+                          : const Icon(Icons.favorite_outline),
+                    ),
+                  ),
                   Container(
                     height: dSize.height * 0.23,
                     decoration: BoxDecoration(
@@ -60,7 +101,7 @@ class _ProductCartState extends State<ProductCart> {
                 ],
               ),
               Padding(
-                padding: EdgeInsets.only(left: 8),
+                padding: const EdgeInsets.only(left: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -78,7 +119,7 @@ class _ProductCartState extends State<ProductCart> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(top: 8, left: 8, right: 8),
+                padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -94,7 +135,7 @@ class _ProductCartState extends State<ProductCart> {
                         ),
                         const SizedBox(width: 5),
                         ChoiceChip(
-                          label: Text(""),
+                          label: const Text(""),
                           selected: selected,
                           visualDensity: VisualDensity.compact,
                           selectedColor: Colors.black,

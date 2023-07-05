@@ -2,10 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:hive/hive.dart';
+import 'package:mini_ecom/models/constants.dart';
 import 'package:mini_ecom/models/sneaker_model.dart';
 import 'package:mini_ecom/services/helper.dart';
 import 'package:mini_ecom/views/shared/app_style.dart';
 import 'package:mini_ecom/views/shared/checkout_btn.dart';
+import 'package:mini_ecom/views/ui/favorite_page.dart';
 import 'package:provider/provider.dart';
 import 'package:mini_ecom/controllers/producut_provider.dart';
 
@@ -21,8 +23,6 @@ class ProductPage extends StatefulWidget {
 
 class _ProductPageState extends State<ProductPage> {
   final PageController pageController = PageController();
-  final _cartBox = Hive.box('cart_box');
-
   late Future<SneakersModel> _sneakers;
 
   void getShoe() {
@@ -35,8 +35,27 @@ class _ProductPageState extends State<ProductPage> {
     }
   }
 
+  final _cartBox = Hive.box('cart_box');
   Future<void> _createCart(Map<String, dynamic> newCart) async {
     await _cartBox.add(newCart);
+  }
+
+  final _favBox = Hive.box('fav_box');
+  Future<void> createFav(Map<String, dynamic> addFav) async {
+    await _favBox.add(addFav);
+    getFavorite();
+  }
+
+  getFavorite() {
+    final favData = _favBox.keys.map((key) {
+      final item = _favBox.get(key);
+
+      return {'key': key, 'id': item['id']};
+    }).toSet();
+
+    favor = favData.toList();
+    ids = favor.map((item) => item['id']).toList();
+    setState(() {});
   }
 
   @override
@@ -132,10 +151,34 @@ class _ProductPageState extends State<ProductPage> {
                                                   .height *
                                               0.1,
                                           right: 16,
-                                          child: const Icon(
-                                              Icons.favorite_outline,
-                                              size: 30,
-                                              color: Colors.black),
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              if (ids.contains(widget.id)) {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            const FavoritePage()));
+                                              } else {
+                                                createFav({
+                                                  'id': sneaker.id,
+                                                  'name': sneaker.name,
+                                                  'category': sneaker.category,
+                                                  'price': sneaker.price,
+                                                  'imageUrl':
+                                                      sneaker.imageUrl[0]
+                                                });
+                                              }
+                                            },
+                                            child: ids.contains(sneaker.id)
+                                                ? const Icon(Icons.favorite,
+                                                    size: 30,
+                                                    color: Colors.black)
+                                                : const Icon(
+                                                    Icons.favorite_outline,
+                                                    size: 30,
+                                                    color: Colors.black),
+                                          ),
                                         ),
                                         Positioned(
                                             right: 0,

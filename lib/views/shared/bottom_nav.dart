@@ -46,8 +46,8 @@ class BottomNav extends StatelessWidget {
                     mainScreenNotifier.pageIndex = 2;
                   },
                   iconData: mainScreenNotifier.pageIndex == 2
-                      ? Icons.add
-                      : Icons.add_outlined,
+                      ? Icons.favorite
+                      : Icons.favorite_outline,
                 ),
                 BottomNavWidget(
                   onTap: () {
