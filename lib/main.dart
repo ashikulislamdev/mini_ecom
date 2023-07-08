@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:mini_ecom/controllers/favorite_provider.dart';
 import 'package:mini_ecom/controllers/main_screen_provider.dart';
 import 'package:mini_ecom/controllers/producut_provider.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +16,7 @@ void main() async {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => MainScreenNotifier()),
     ChangeNotifierProvider(create: (context) => ProductNotifier()),
+    ChangeNotifierProvider(create: (context) => FavoriteNotifire()),
   ], child: const MyApp()));
 }
 

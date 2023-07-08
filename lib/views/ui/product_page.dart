@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:hive/hive.dart';
-import 'package:mini_ecom/models/constants.dart';
+import 'package:mini_ecom/controllers/favorite_provider.dart';
 import 'package:mini_ecom/models/sneaker_model.dart';
 import 'package:mini_ecom/services/helper.dart';
 import 'package:mini_ecom/views/shared/app_style.dart';
@@ -40,24 +40,6 @@ class _ProductPageState extends State<ProductPage> {
     await _cartBox.add(newCart);
   }
 
-  final _favBox = Hive.box('fav_box');
-  Future<void> createFav(Map<String, dynamic> addFav) async {
-    await _favBox.add(addFav);
-    getFavorite();
-  }
-
-  getFavorite() {
-    final favData = _favBox.keys.map((key) {
-      final item = _favBox.get(key);
-
-      return {'key': key, 'id': item['id']};
-    }).toSet();
-
-    favor = favData.toList();
-    ids = favor.map((item) => item['id']).toList();
-    setState(() {});
-  }
-
   @override
   void initState() {
     getShoe();
@@ -66,6 +48,9 @@ class _ProductPageState extends State<ProductPage> {
 
   @override
   Widget build(BuildContext context) {
+    var favoriteNotifire = Provider.of<FavoriteNotifire>(context, listen: true);
+    favoriteNotifire.getFavorite();
+
     return Scaffold(
       body: FutureBuilder<SneakersModel>(
           future: _sneakers,
@@ -151,34 +136,42 @@ class _ProductPageState extends State<ProductPage> {
                                                   .height *
                                               0.1,
                                           right: 16,
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              if (ids.contains(widget.id)) {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            const FavoritePage()));
-                                              } else {
-                                                createFav({
-                                                  'id': sneaker.id,
-                                                  'name': sneaker.name,
-                                                  'category': sneaker.category,
-                                                  'price': sneaker.price,
-                                                  'imageUrl':
-                                                      sneaker.imageUrl[0]
-                                                });
-                                              }
-                                            },
-                                            child: ids.contains(sneaker.id)
-                                                ? const Icon(Icons.favorite,
-                                                    size: 30,
-                                                    color: Colors.black)
-                                                : const Icon(
-                                                    Icons.favorite_outline,
-                                                    size: 30,
-                                                    color: Colors.black),
-                                          ),
+                                          child: Consumer<FavoriteNotifire>(
+                                              builder: (context,
+                                                  favoriteNotifire, child) {
+                                            return GestureDetector(
+                                              onTap: () {
+                                                if (favoriteNotifire.ids
+                                                    .contains(widget.id)) {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              const FavoritePage()));
+                                                } else {
+                                                  favoriteNotifire.createFav({
+                                                    'id': sneaker.id,
+                                                    'name': sneaker.name,
+                                                    'category':
+                                                        sneaker.category,
+                                                    'price': sneaker.price,
+                                                    'imageUrl':
+                                                        sneaker.imageUrl[0]
+                                                  });
+                                                }
+                                                setState(() {});
+                                              },
+                                              child: favoriteNotifire.ids
+                                                      .contains(sneaker.id)
+                                                  ? const Icon(Icons.favorite,
+                                                      size: 30,
+                                                      color: Colors.black)
+                                                  : const Icon(
+                                                      Icons.favorite_outline,
+                                                      size: 30,
+                                                      color: Colors.black),
+                                            );
+                                          }),
                                         ),
                                         Positioned(
                                             right: 0,

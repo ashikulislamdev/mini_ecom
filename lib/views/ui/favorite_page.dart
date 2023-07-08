@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
-import 'package:mini_ecom/models/constants.dart';
+import 'package:mini_ecom/controllers/favorite_provider.dart';
 import 'package:mini_ecom/views/shared/app_style.dart';
 import 'package:mini_ecom/views/ui/main_screen.dart';
+import 'package:provider/provider.dart';
 
 class FavoritePage extends StatefulWidget {
   const FavoritePage({super.key});
@@ -13,27 +13,10 @@ class FavoritePage extends StatefulWidget {
 }
 
 class _FavoritePageState extends State<FavoritePage> {
-  final _favBox = Hive.box('fav_box');
-
-  deleteFav(int key) async {
-    await _favBox.delete(key);
-  }
-
   @override
   Widget build(BuildContext context) {
-    List<dynamic> favoriteList = [];
-    final favData = _favBox.keys.map((key) {
-      final item = _favBox.get(key);
-      return {
-        'key': key,
-        'id': item['id'],
-        'name': item['name'],
-        'category': item['category'],
-        'price': item['price'],
-        'imageUrl': item['imageUrl']
-      };
-    }).toList();
-    favoriteList = favData.reversed.toList();
+    final favoriteNotifire = Provider.of<FavoriteNotifire>(context);
+    favoriteNotifire.getAllData();
 
     return Scaffold(
       body: SizedBox(
@@ -61,10 +44,10 @@ class _FavoritePageState extends State<FavoritePage> {
               Padding(
                 padding: const EdgeInsets.all(8),
                 child: ListView.builder(
-                  itemCount: favoriteList.length,
+                  itemCount: favoriteNotifire.favoriteList.length,
                   padding: const EdgeInsets.only(top: 100),
                   itemBuilder: (context, index) {
-                    final shoe = favoriteList[index];
+                    final shoe = favoriteNotifire.favoriteList[index];
                     return Padding(
                       padding: const EdgeInsets.all(8),
                       child: ClipRRect(
@@ -125,8 +108,8 @@ class _FavoritePageState extends State<FavoritePage> {
                                 padding: EdgeInsets.all(8),
                                 child: GestureDetector(
                                   onTap: () {
-                                    deleteFav(shoe['key']);
-                                    ids.removeWhere(
+                                    favoriteNotifire.deleteFav(shoe['key']);
+                                    favoriteNotifire.ids.removeWhere(
                                         (element) => element == shoe['id']);
                                     Navigator.push(
                                         context,
