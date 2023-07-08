@@ -90,8 +90,8 @@ class _ProductCartState extends State<ProductCart> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      widget.name,
+                    ReuseableText(
+                      text: widget.name,
                       style: appStyleWithHt(
                           32, Colors.black, FontWeight.bold, 1.1),
                     ),

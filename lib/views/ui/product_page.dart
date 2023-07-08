@@ -7,8 +7,8 @@ import 'package:mini_ecom/models/sneaker_model.dart';
 import 'package:mini_ecom/views/shared/app_style.dart';
 import 'package:mini_ecom/views/shared/checkout_btn.dart';
 import 'package:mini_ecom/views/ui/favorite_page.dart';
-import 'package:provider/provider.dart';
 import 'package:mini_ecom/controllers/producut_provider.dart';
+import 'package:provider/provider.dart';
 
 class ProductPage extends StatefulWidget {
   const ProductPage({super.key, required this.id, required this.category});
@@ -207,15 +207,15 @@ class _ProductPageState extends State<ProductPage> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text(
-                                            sneaker.name,
+                                          ReuseableText(
+                                            text: sneaker.name,
                                             style: appStyle(40, Colors.black,
                                                 FontWeight.bold),
                                           ),
                                           Row(
                                             children: [
-                                              Text(
-                                                sneaker.category,
+                                              ReuseableText(
+                                                text: sneaker.category,
                                                 style: appStyle(20, Colors.grey,
                                                     FontWeight.w500),
                                               ),
@@ -245,8 +245,8 @@ class _ProductPageState extends State<ProductPage> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Text(
-                                                "\$${sneaker.price}",
+                                              ReuseableText(
+                                                text: "\$${sneaker.price}",
                                                 style: appStyle(
                                                     26,
                                                     Colors.black,

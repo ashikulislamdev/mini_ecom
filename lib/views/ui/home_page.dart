@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mini_ecom/controllers/favorite_provider.dart';
 import 'package:mini_ecom/controllers/producut_provider.dart';
 import 'package:mini_ecom/views/shared/app_style.dart';
@@ -32,28 +33,29 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       backgroundColor: const Color(0xFFE2E2E2),
       body: SizedBox(
         height: dSize.height,
+        width: dSize.width,
         child: Stack(
           children: [
             Container(
-              padding: const EdgeInsets.fromLTRB(16, 45, 0, 0),
-              height: dSize.height * 0.4,
+              padding: EdgeInsets.fromLTRB(16.w, 45.h, 0, 0),
+              height: 325.h,
               decoration: const BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage("assets/images/top_image.png"),
                       fit: BoxFit.fill)),
               child: Container(
-                padding: EdgeInsets.only(left: 8, bottom: 15),
+                padding: EdgeInsets.only(left: 8.w, bottom: 15.h),
                 width: dSize.width,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "Sports Shoes",
+                    ReuseableText(
+                      text: "Sports Shoes",
                       style: appStyleWithHt(
                           42, Colors.white, FontWeight.bold, 1.5),
                     ),
-                    Text(
-                      "Collection",
+                    ReuseableText(
+                      text: "Collection",
                       style: appStyleWithHt(
                           42, Colors.white, FontWeight.bold, 1.2),
                     ),
@@ -76,9 +78,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(top: dSize.height * 0.265),
+              padding: EdgeInsets.only(top: 203.h),
               child: Container(
-                padding: const EdgeInsets.only(left: 12),
+                padding: EdgeInsets.only(left: 12.w),
                 child: TabBarView(controller: tabController, children: [
                   HomeWidget(male: productProvider.male, tabIndex: 0),
                   HomeWidget(male: productProvider.female, tabIndex: 1),
