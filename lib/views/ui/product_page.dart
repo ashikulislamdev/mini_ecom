@@ -1,14 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:mini_ecom/controllers/cart_provider.dart';
-import 'package:mini_ecom/controllers/favorite_provider.dart';
-import 'package:mini_ecom/models/sneaker_model.dart';
-import 'package:mini_ecom/views/shared/app_style.dart';
-import 'package:mini_ecom/views/shared/checkout_btn.dart';
-import 'package:mini_ecom/views/ui/favorite_page.dart';
-import 'package:mini_ecom/controllers/producut_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:mini_ecom/views/shared/export_package.dart';
+import '../shared/export.dart';
 
 class ProductPage extends StatefulWidget {
   const ProductPage({super.key, required this.id, required this.category});

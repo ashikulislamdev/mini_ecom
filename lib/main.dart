@@ -1,13 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hive_flutter/adapters.dart';
-import 'package:mini_ecom/controllers/cart_provider.dart';
-import 'package:mini_ecom/controllers/favorite_provider.dart';
-import 'package:mini_ecom/controllers/main_screen_provider.dart';
-import 'package:mini_ecom/controllers/producut_provider.dart';
-import 'package:provider/provider.dart';
-
-import 'views/ui/main_screen.dart';
+import 'package:mini_ecom/views/shared/export.dart';
+import 'package:mini_ecom/views/shared/export_package.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -1,9 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
-import 'package:mini_ecom/controllers/favorite_provider.dart';
-import 'package:mini_ecom/views/shared/app_style.dart';
-import 'package:mini_ecom/views/ui/main_screen.dart';
-import 'package:provider/provider.dart';
+import 'package:mini_ecom/views/shared/export.dart';
+import 'package:mini_ecom/views/shared/export_package.dart';
 
 class FavoritePage extends StatefulWidget {
   const FavoritePage({super.key});

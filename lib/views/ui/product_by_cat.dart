@@ -1,10 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:mini_ecom/controllers/producut_provider.dart';
-import 'package:mini_ecom/views/shared/app_style.dart';
-import 'package:mini_ecom/views/shared/by_cat_widget.dart';
-import 'package:mini_ecom/views/shared/category_btn.dart';
-import 'package:mini_ecom/views/shared/customer_spacer.dart';
-import 'package:provider/provider.dart';
+import 'package:mini_ecom/views/shared/export.dart';
+import 'package:mini_ecom/views/shared/export_package.dart';
 
 class ProductByCat extends StatefulWidget {
   const ProductByCat({super.key, required this.tabIndex});
