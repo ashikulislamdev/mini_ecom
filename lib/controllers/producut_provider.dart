@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mini_ecom/models/sneaker_model.dart';
+import 'package:mini_ecom/services/helper.dart';
 
 class ProductNotifier extends ChangeNotifier {
   int _activePage = 0;
@@ -29,5 +31,32 @@ class ProductNotifier extends ChangeNotifier {
   set sizes(List<String> sizes) {
     _sizes = sizes;
     notifyListeners();
+  }
+
+  late Future<List<SneakersModel>> male;
+  late Future<List<SneakersModel>> female;
+  late Future<List<SneakersModel>> kids;
+  late Future<SneakersModel> sneakers;
+
+  void getMale() {
+    male = Helper().getMailSneakers();
+  }
+
+  void getFemale() {
+    female = Helper().getFemailneakers();
+  }
+
+  void getKids() {
+    kids = Helper().getKidsSneakers();
+  }
+
+  void getShoe(String category, String id) {
+    if (category == "Men's Running") {
+      sneakers = Helper().getMailSneakersById(id);
+    } else if (category == "Women's Running") {
+      sneakers = Helper().getFemailSneakersById(id);
+    } else {
+      sneakers = Helper().getKidsSneakersById(id);
+    }
   }
 }

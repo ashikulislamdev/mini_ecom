@@ -1,10 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:hive/hive.dart';
+import 'package:mini_ecom/controllers/cart_provider.dart';
 import 'package:mini_ecom/controllers/favorite_provider.dart';
 import 'package:mini_ecom/models/sneaker_model.dart';
-import 'package:mini_ecom/services/helper.dart';
 import 'package:mini_ecom/views/shared/app_style.dart';
 import 'package:mini_ecom/views/shared/checkout_btn.dart';
 import 'package:mini_ecom/views/ui/favorite_page.dart';
@@ -23,37 +22,19 @@ class ProductPage extends StatefulWidget {
 
 class _ProductPageState extends State<ProductPage> {
   final PageController pageController = PageController();
-  late Future<SneakersModel> _sneakers;
-
-  void getShoe() {
-    if (widget.category == "Men's Running") {
-      _sneakers = Helper().getMailSneakersById(widget.id);
-    } else if (widget.category == "Women's Running") {
-      _sneakers = Helper().getFemailSneakersById(widget.id);
-    } else {
-      _sneakers = Helper().getKidsSneakersById(widget.id);
-    }
-  }
-
-  final _cartBox = Hive.box('cart_box');
-  Future<void> _createCart(Map<String, dynamic> newCart) async {
-    await _cartBox.add(newCart);
-  }
-
-  @override
-  void initState() {
-    getShoe();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
-    var favoriteNotifire = Provider.of<FavoriteNotifire>(context, listen: true);
-    favoriteNotifire.getFavorite();
+    var productProvider = Provider.of<ProductNotifier>(context);
+    productProvider.getShoe(widget.category, widget.id);
+
+    var cartProvider = Provider.of<CartProvider>(context);
+    var favoriteProvider = Provider.of<FavoriteNotifire>(context, listen: true);
+    favoriteProvider.getFavorite();
 
     return Scaffold(
       body: FutureBuilder<SneakersModel>(
-          future: _sneakers,
+          future: productProvider.sneakers,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator();
@@ -418,7 +399,7 @@ class _ProductPageState extends State<ProductPage> {
                                                   top: 12),
                                               child: CheckOutBtn(
                                                 onTap: () async {
-                                                  _createCart({
+                                                  cartProvider.createCart({
                                                     'id': sneaker.id,
                                                     'name': sneaker.name,
                                                     'category':
@@ -431,7 +412,7 @@ class _ProductPageState extends State<ProductPage> {
                                                     'qty': 1,
                                                   });
                                                   //productNotifier.sizes.clear();
-                                                  print(productNotifier.sizes);
+                                                  //print(productNotifier.sizes);
                                                   Navigator.pop(context);
                                                 },
                                                 btnLabel: 'Add to Cart',

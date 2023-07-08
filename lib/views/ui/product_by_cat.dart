@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mini_ecom/models/sneaker_model.dart';
-import 'package:mini_ecom/services/helper.dart';
+import 'package:mini_ecom/controllers/producut_provider.dart';
 import 'package:mini_ecom/views/shared/app_style.dart';
 import 'package:mini_ecom/views/shared/by_cat_widget.dart';
 import 'package:mini_ecom/views/shared/category_btn.dart';
 import 'package:mini_ecom/views/shared/customer_spacer.dart';
+import 'package:provider/provider.dart';
 
 class ProductByCat extends StatefulWidget {
   const ProductByCat({super.key, required this.tabIndex});
@@ -20,29 +20,16 @@ class _ProductByCatState extends State<ProductByCat>
   late final TabController tabController =
       TabController(length: 3, vsync: this);
 
-  late Future<List<SneakersModel>> _male;
-  late Future<List<SneakersModel>> _female;
-  late Future<List<SneakersModel>> _kids;
-
-  void getMale() {
-    _male = Helper().getMailSneakers();
-  }
-
-  void getFemale() {
-    _female = Helper().getFemailneakers();
-  }
-
-  void getKids() {
-    _kids = Helper().getKidsSneakers();
+  @override
+  void initState() {
+    tabController.animateTo(widget.tabIndex, curve: Curves.easeIn);
+    super.initState();
   }
 
   @override
-  void initState() {
-    getMale();
-    getFemale();
-    getKids();
-
-    super.initState();
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
   }
 
   List<String> brand = [
@@ -55,6 +42,10 @@ class _ProductByCatState extends State<ProductByCat>
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
+    var productProvider = Provider.of<ProductNotifier>(context);
+    productProvider.getMale();
+    productProvider.getFemale();
+    productProvider.getKids();
 
     return Scaffold(
       backgroundColor: const Color(0xFFE2E2E2),
@@ -125,9 +116,10 @@ class _ProductByCatState extends State<ProductByCat>
               child: ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(16)),
                 child: TabBarView(controller: tabController, children: [
-                  ProductByCatWidget(male: _male, dSize: dSize),
-                  ProductByCatWidget(male: _female, dSize: dSize),
-                  ProductByCatWidget(male: _kids, dSize: dSize),
+                  ProductByCatWidget(male: productProvider.male, dSize: dSize),
+                  ProductByCatWidget(
+                      male: productProvider.female, dSize: dSize),
+                  ProductByCatWidget(male: productProvider.kids, dSize: dSize),
                 ]),
               ),
             )
